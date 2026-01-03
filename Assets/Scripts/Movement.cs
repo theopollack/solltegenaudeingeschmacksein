@@ -57,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        bool isGrounded = Physics2D.OverlapCircle(gameObject.transform.position, 0.5f, groundLayer);
+        bool isGrounded = Physics2D.OverlapCircle(gameObject.transform.position, 0.9f, groundLayer);
         Debug.Log("Is Grounded: " + isGrounded);
 
         // Springen
