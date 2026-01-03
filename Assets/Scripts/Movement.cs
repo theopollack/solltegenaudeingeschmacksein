@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private float moveInput;
 
-    private float jumpPower;
-  
+    public LayerMask groundLayer;
+
 
     void Awake()
     {
@@ -20,21 +20,20 @@ public class PlayerMovement : MonoBehaviour
     {
         // Input abfragen (A/D oder Pfeiltasten)
         moveInput = Input.GetAxisRaw("Horizontal");
-           
-        if (Input.GetButtonDown("Jump"))
+
+        bool isGrounded = Physics2D.OverlapCircle(gameObject.transform.position, 1f, groundLayer);
+        Debug.Log("Is Grounded: " + isGrounded);
+
+        // Springen
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            // Springen
-            jumpPower = jumpForce;
-        }
-        else
-        {
-            jumpPower = 0;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
     }
 
     void FixedUpdate()
     {
         // Rigidbody bewegen
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y + jumpPower);
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
     }
 }
