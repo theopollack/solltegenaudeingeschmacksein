@@ -11,11 +11,16 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
 
     public bool isPlayerOne = true;
+    
+    private Animator anim;
+
+    private bool facingRight = true;
 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -29,15 +34,20 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey("left"))
             {
                 rb.linearVelocity = new Vector2(-speed, rb.linearVelocity.y);
+                anim.Play("robo_walk");
+                facingRight = false;
             }
 
             if (Input.GetKey("right"))
             {
                 rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
+                anim.Play("robo_walk");
+                facingRight = true;
             }
             else if (!Input.GetKey("left") && !Input.GetKey("right"))
             {
                 rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+                anim.Play("New State");
             }
         }
         else
@@ -45,16 +55,30 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKey("a"))
             {
                 rb.linearVelocity = new Vector2(-speed, rb.linearVelocity.y);
+                anim.Play("fox_walk");
+                facingRight = false;
             }
 
             if (Input.GetKey("d"))
             {
                 rb.linearVelocity = new Vector2(speed, rb.linearVelocity.y);
+                anim.Play("fox_walk");
+                facingRight = true;
             }
             else if (!Input.GetKey("a") && !Input.GetKey("d"))
             {
                 rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+                anim.Play("New State");
             }
+        }
+
+        if(facingRight)
+        {
+            transform.localScale = new Vector3(1.6f, 1.6f, 1f);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1.6f, 1.6f, 1f);
         }
 
         bool isGrounded = Physics2D.OverlapCircle(gameObject.transform.position, 0.9f, groundLayer);

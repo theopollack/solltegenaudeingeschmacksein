@@ -1,15 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public GameObject Laser;
     public GameObject Button;
+    public GameObject Platform;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Button"))
+        if (collision.gameObject.CompareTag("LaserButton"))
         {
             DeactivateLaser(Laser);
+        }
+
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+           StartCoroutine(ActivatePlatform(collision.gameObject));
         }
 
         if (collision.gameObject.CompareTag("Jumppad"))
@@ -24,5 +32,13 @@ public class Player : MonoBehaviour
         Button.GetComponent<SpriteRenderer>().color = Color.green;
         Button.transform.position = new Vector3(Button.transform.position.x, Button.transform.position.y - 0.1f, Button.transform.position.z);
         Button.GetComponent<BoxCollider2D>().enabled = false;
+    }
+
+    IEnumerator ActivatePlatform(GameObject button)
+    {
+        button.GetComponent<BoxCollider2D>().enabled = false;
+        button.GetComponent<SpriteRenderer>().color = Color.green;
+        yield return new WaitForSeconds(0.5f);
+        Platform.GetComponent<Platform>().Go();
     }
 }
