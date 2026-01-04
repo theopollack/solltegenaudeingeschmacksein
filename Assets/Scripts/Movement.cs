@@ -7,9 +7,15 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
     public bool isPlayerOne = true;
 
+    public Transform groundCheck;   // empty child at feet
+    public float groundCheckRadius = 0.15f;
+
     private Rigidbody2D rb;
     private Animator anim;
     private bool facingRight = true;
+
+    float moveInput;
+    bool jumpRequest;
 
     void Awake()
     {
@@ -19,56 +25,56 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        float move = 0f;
-
         // -------- INPUT --------
+        moveInput = 0f;
+
         if (isPlayerOne)
         {
-            if (Input.GetKey(KeyCode.LeftArrow))
-                move = -1f;
-            else if (Input.GetKey(KeyCode.RightArrow))
-                move = 1f;
+            if (Input.GetKey(KeyCode.LeftArrow)) moveInput = -1f;
+            else if (Input.GetKey(KeyCode.RightArrow)) moveInput = 1f;
         }
         else
         {
-            if (Input.GetKey(KeyCode.A))
-                move = -1f;
-            else if (Input.GetKey(KeyCode.D))
-                move = 1f;
+            if (Input.GetKey(KeyCode.A)) moveInput = -1f;
+            else if (Input.GetKey(KeyCode.D)) moveInput = 1f;
         }
 
-        // -------- MOVE --------
-        rb.linearVelocity = new Vector2(move * speed, rb.linearVelocity.y);
+        if (Input.GetKeyDown(KeyCode.Space))
+            jumpRequest = true;
 
-        // -------- WALK ANIMATION --------
-        bool isWalking = move != 0;
-        anim.SetBool("isWalking", isWalking);
+        // -------- ANIMATION --------
+        anim.SetBool("isWalking", moveInput != 0);
 
-        // -------- FLIP --------
-        if (move > 0)
-            facingRight = true;
-        else if (move < 0)
-            facingRight = false;
+        if (moveInput > 0) facingRight = true;
+        else if (moveInput < 0) facingRight = false;
 
         transform.localScale = new Vector3(
             facingRight ? 1.6f : -1.6f,
             1.6f,
             1f
         );
+    }
+
+    void FixedUpdate()
+    {
+        // -------- MOVE --------
+        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
 
         // -------- GROUND CHECK --------
         bool isGrounded = Physics2D.OverlapCircle(
-            transform.position,
-            0.9f,
+            groundCheck.position,
+            groundCheckRadius,
             groundLayer
         );
 
         anim.SetBool("isGrounded", isGrounded);
 
         // -------- JUMP --------
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (jumpRequest && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
+
+        jumpRequest = false;
     }
 }

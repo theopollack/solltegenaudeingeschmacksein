@@ -12,6 +12,11 @@ public class Platform : MonoBehaviour
         transform.position += new Vector3(0, distance * Time.deltaTime, 0);
     }
 
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void Go()
     {
         StartCoroutine(MoveToTarget());

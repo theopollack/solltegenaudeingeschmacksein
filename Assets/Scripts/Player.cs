@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     {
         laser.SetActive(false);
         Button.GetComponent<SpriteRenderer>().color = Color.green;
-        Button.transform.position = new Vector3(Button.transform.position.x, Button.transform.position.y - 0.1f, Button.transform.position.z);
+        Button.transform.position = new Vector3(Button.transform.position.x, Button.transform.position.y - 0.15f, Button.transform.position.z);
         Button.GetComponent<BoxCollider2D>().enabled = false;
     }
 
@@ -38,7 +38,9 @@ public class Player : MonoBehaviour
     {
         button.GetComponent<BoxCollider2D>().enabled = false;
         button.GetComponent<SpriteRenderer>().color = Color.green;
-        yield return new WaitForSeconds(0.5f);
+        Button.transform.position = new Vector3(Button.transform.position.x, Button.transform.position.y - 0.15f, Button.transform.position.z);
+        Platform.SetActive(true);
+        yield return new WaitForSeconds(1f);
         Platform.GetComponent<Platform>().Go();
     }
 }
