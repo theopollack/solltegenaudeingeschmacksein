@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
             gameObject.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(gameObject.GetComponent<Rigidbody2D>().linearVelocity.x, 20f);
         }
 
-        if(collision.gameObject.CompareTag("Goal"))
+        if(collision.gameObject.CompareTag("Finish"))
         {
             Debug.Log("Level Complete!");
         }
