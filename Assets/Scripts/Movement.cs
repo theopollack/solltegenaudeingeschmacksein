@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     public float speed = 12f;
     public float jumpForce = 16f;
@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private bool facingRight = true;
+    public Transform[] wallChecker;
 
     float moveInput;
     bool jumpRequest;
@@ -44,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
         // -------- ANIMATION --------
         anim.SetBool("isWalking", moveInput != 0);
+        bool isWalking = anim.GetBool("isWalking");
 
         if (moveInput > 0) facingRight = true;
         else if (moveInput < 0) facingRight = false;
@@ -57,17 +59,29 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        // -------- MOVE --------
-        rb.linearVelocity = new Vector2(moveInput * speed, rb.linearVelocity.y);
-
         // -------- GROUND CHECK --------
         bool isGrounded = Physics2D.OverlapCircle(
             groundCheck.position,
             groundCheckRadius,
             groundLayer
         );
-
         anim.SetBool("isGrounded", isGrounded);
+
+        // -------- MOVE --------
+        float targetVelocityX = moveInput * speed;
+
+        if (isGrounded)
+        {
+            // Apply friction when grounded
+            float friction = 0.7f; // 0 = stop instantly, 1 = no friction (adjust to taste)
+            float newVelocityX = Mathf.Lerp(rb.linearVelocity.x, targetVelocityX, friction);
+            rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
+        }
+        else
+        {
+            // In air, move directly (no friction)
+            rb.linearVelocity = new Vector2(targetVelocityX, rb.linearVelocity.y);
+        }
 
         // -------- JUMP --------
         if (jumpRequest && isGrounded)
@@ -77,4 +91,5 @@ public class PlayerMovement : MonoBehaviour
 
         jumpRequest = false;
     }
+
 }
