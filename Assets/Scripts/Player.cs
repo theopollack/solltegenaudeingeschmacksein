@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject Laser;
-    public GameObject Button;
     public GameObject Platform;
 
     public GameObject spawn;
@@ -14,7 +12,12 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("LaserButton"))
         {
-            DeactivateLaser(Laser);
+            DeactivateLaser(collision.gameObject.GetComponent<ButtonReference>().GetReference(), collision.gameObject);
+        }
+
+        if(collision.gameObject.CompareTag("Laser"))
+        {
+            gameObject.GetComponent<PlayerRespawn>().Die();
         }
 
         if (collision.gameObject.CompareTag("Platform"))
@@ -33,7 +36,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void DeactivateLaser(GameObject laser)
+    void DeactivateLaser(GameObject laser, GameObject Button)
     {
         laser.SetActive(false);
         Button.GetComponent<SpriteRenderer>().color = Color.green;
