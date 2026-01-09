@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Button
   - Jumppad
+  - Laser
+  - LaserButton
+  - Platform
   layers:
   - Default
   - TransparentFX

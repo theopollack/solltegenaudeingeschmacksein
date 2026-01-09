@@ -1,33 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class Platform : MonoBehaviour
 {
-    public float targetY = 10.0f;
-    public float speed = 1f;
+    [Header("Movement Settings")]
+    public float targetY = 10f;
+    public float speed = 2f;
 
-    void MoveUp(float distance)
-    {
-        transform.position += new Vector3(0, distance * Time.deltaTime, 0);
-    }
+    float startY;
+    Coroutine routine;
 
     void Start()
     {
-        gameObject.SetActive(false);
+        startY = transform.position.y;
     }
 
-    public void Go()
+    public void GoUp()
     {
-        StartCoroutine(MoveToTarget());
+        StartMove(targetY);
     }
 
-    IEnumerator MoveToTarget()
+    public void GoDown()
     {
-        while (transform.position.y < targetY)
+        StartMove(startY);
+    }
+
+    void StartMove(float y)
+    {
+        if (routine != null)
+            StopCoroutine(routine);
+
+        routine = StartCoroutine(MoveTo(y));
+    }
+
+    IEnumerator MoveTo(float y)
+    {
+        while (!Mathf.Approximately(transform.position.y, y))
         {
-            MoveUp(speed);
-            yield return null; // Wait for next frame
+            float newY = Mathf.MoveTowards(
+                transform.position.y,
+                y,
+                speed * Time.deltaTime
+            );
+
+            transform.position = new Vector3(
+                transform.position.x,
+                newY,
+                transform.position.z
+            );
+
+            yield return null;
         }
     }
 }
