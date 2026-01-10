@@ -1,56 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public GameObject Platform;
-
     public GameObject spawn;
 
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("LaserButton"))
         {
-            DeactivateLaser(collision.gameObject.GetComponent<ButtonReference>().GetReference(), collision.gameObject);
+            DeactivateLaser(
+                collision.gameObject.GetComponent<ButtonReference>().GetReference(),
+                collision.gameObject
+            );
         }
 
-        if(collision.gameObject.CompareTag("Laser"))
+        if (collision.gameObject.CompareTag("Laser"))
         {
-            gameObject.GetComponent<PlayerRespawn>().Die();
-        }
-
-        if (collision.gameObject.CompareTag("Platform"))
-        {
-           StartCoroutine(ActivatePlatform(collision.gameObject));
+            GetComponent<PlayerRespawn>().Die();
         }
 
         if (collision.gameObject.CompareTag("Jumppad"))
         {
-            gameObject.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(gameObject.GetComponent<Rigidbody2D>().linearVelocity.x, 20f);
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 20f);
         }
 
-        if(collision.gameObject.CompareTag("Finish"))
+        if (collision.gameObject.CompareTag("Finish"))
         {
             Debug.Log("Level Complete!");
         }
     }
 
-    void DeactivateLaser(GameObject laser, GameObject Button)
+    void DeactivateLaser(GameObject laser, GameObject button)
     {
         laser.SetActive(false);
-        Button.GetComponent<SpriteRenderer>().color = Color.green;
-        Button.transform.position = new Vector3(Button.transform.position.x, Button.transform.position.y - 0.15f, Button.transform.position.z);
-        Button.GetComponent<BoxCollider2D>().enabled = false;
-    }
-
-    IEnumerator ActivatePlatform(GameObject button)
-    {
+        if (button.TryGetComponent<SpriteRenderer>(out var sr))
+        {
+            sr.color = Color.green;
+        }
+        button.transform.position += Vector3.down * 0.15f;
         button.GetComponent<BoxCollider2D>().enabled = false;
-        button.GetComponent<SpriteRenderer>().color = Color.green;
-        button.transform.position = new Vector3(button.transform.position.x, button.transform.position.y - 0.15f, button.transform.position.z);
-        Platform.SetActive(true);
-        yield return new WaitForSeconds(1f);
-        Platform.GetComponent<Platform>().Go();
     }
 }
