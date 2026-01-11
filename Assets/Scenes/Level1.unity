@@ -278,6 +278,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Laser
       objectReference: {fileID: 0}
+    - target: {fileID: 155369157779817451, guid: e5c327332d4ae3249aceaf3842a933e1, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7870736112258215520, guid: e5c327332d4ae3249aceaf3842a933e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.03
