@@ -4,52 +4,51 @@ using System.Collections;
 public class Platform : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float targetY = 10f;
+    public Vector2 targetPos;
     public float speed = 2f;
 
-    float startY;
-    Coroutine routine;
+    Vector2 startPos;
+    
+    private bool onPlate;
+
 
     void Start()
     {
-        startY = transform.position.y;
+        startPos = transform.position;
     }
 
     public void GoUp()
     {
-        StartMove(targetY);
+        StartCoroutine(MoveTo(speed));
+        onPlate = true;
     }
 
     public void GoDown()
     {
-        StartMove(startY);
+        StartCoroutine(MoveTo(speed));
+        onPlate = false;
     }
 
-    void StartMove(float y)
+    IEnumerator MoveTo(float moveSpeed)
     {
-        if (routine != null)
-            StopCoroutine(routine);
-
-        routine = StartCoroutine(MoveTo(y));
-    }
-
-    IEnumerator MoveTo(float y)
-    {
-        while (!Mathf.Approximately(transform.position.y, y))
+        if(onPlate)
         {
-            float newY = Mathf.MoveTowards(
-                transform.position.y,
-                y,
-                speed * Time.deltaTime
-            );
-
-            transform.position = new Vector3(
-                transform.position.x,
-                newY,
-                transform.position.z
-            );
-
-            yield return null;
+            while(Mathf.Abs((transform.position.x - targetPos.x)) > 0.1f || Mathf.Abs((transform.position.y - targetPos.y)) > 0.15f)
+            {
+                float step = moveSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+                yield return new WaitForSeconds(0.01f);
+            }   
         }
+        else
+        {
+            while(Mathf.Abs((transform.position.x - startPos.x)) > 0.1f || Mathf.Abs((transform.position.y - startPos.y)) > 0.2f)
+            {
+                float step = moveSpeed * Time.deltaTime;
+                transform.position = Vector3.MoveTowards(transform.position, startPos, step);
+                yield return new WaitForSeconds(0.01f);
+            }   
+        }
+        
     }
 }

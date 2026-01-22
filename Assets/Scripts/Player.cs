@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public GameObject spawn;
+    public float jumppadForce; 
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -22,7 +23,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Jumppad"))
         {
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 20f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumppadForce);
         }
 
         if (collision.gameObject.CompareTag("Finish"))
