@@ -143,8 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397d274b9deeb9e41929314a6e57d5b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  Platform: {fileID: 0}
   spawn: {fileID: 0}
+  jumppadForce: 0
 --- !u!95 &2601267512847296415
 Animator:
   serializedVersion: 7
@@ -219,7 +219,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 3
+  m_GravityScale: 6
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 8
-  jumpForce: 14
+  jumpForce: 17
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -254,6 +254,7 @@ MonoBehaviour:
   wallChecker:
   - {fileID: 2914362300844054132}
   - {fileID: 5513820791360918297}
+  wallJumpActive: 0
 --- !u!114 &8624976446772148223
 MonoBehaviour:
   m_ObjectHideFlags: 0

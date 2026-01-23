@@ -15,6 +15,31 @@ public class Movement : MonoBehaviour
     private bool facingRight = true;
     public Transform[] wallChecker;
 
+    public bool wallJumpActive;
+    private GameObject currentWallChecker;
+    public bool onWall
+    {
+        get
+        {
+            foreach (Transform checker in wallChecker)
+            {
+                Collider2D hit = Physics2D.OverlapCircle(
+                    checker.position,
+                    0.1f,
+                    groundLayer
+                );
+                if (hit != null)
+                {
+                    currentWallChecker = checker.gameObject;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    private bool justWallJumped;
+
     float moveInput;
     bool jumpRequest;
 
@@ -28,16 +53,18 @@ public class Movement : MonoBehaviour
     {
         // -------- INPUT --------
         moveInput = 0f;
-
-        if (isPlayerOne)
+        if(!justWallJumped)
         {
-            if (Input.GetKey(KeyCode.LeftArrow)) moveInput = -1f;
-            else if (Input.GetKey(KeyCode.RightArrow)) moveInput = 1f;
-        }
-        else
-        {
-            if (Input.GetKey(KeyCode.A)) moveInput = -1f;
-            else if (Input.GetKey(KeyCode.D)) moveInput = 1f;
+            if (isPlayerOne)
+            {
+                if (Input.GetKey(KeyCode.LeftArrow)) moveInput = -1f;
+                else if (Input.GetKey(KeyCode.RightArrow)) moveInput = 1f;
+            }
+            else
+            {
+                if (Input.GetKey(KeyCode.A)) moveInput = -1f;
+                else if (Input.GetKey(KeyCode.D)) moveInput = 1f;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -81,6 +108,7 @@ public class Movement : MonoBehaviour
             float friction = 0.7f; // 0 = stop instantly, 1 = no friction (adjust to taste)
             float newVelocityX = Mathf.Lerp(rb.linearVelocity.x, targetVelocityX, friction);
             rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
+            justWallJumped = false;
         }
         else
         {
@@ -89,9 +117,32 @@ public class Movement : MonoBehaviour
         }
 
         // -------- JUMP --------
-        if (jumpRequest && isGrounded)
+        if (jumpRequest && isGrounded || onWall && !isPlayerOne && jumpRequest && !isGrounded)
         {
+            float force = 40f; // Horizontal force applied during wall jump
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            if(onWall && !isPlayerOne && jumpRequest && !isGrounded)
+            {
+                justWallJumped = true;
+                if (currentWallChecker.transform.position.x > transform.position.x)
+                {
+                    // Wall is on the right side
+                    rb.linearVelocity = new Vector2(-force, jumpForce - force);
+                    facingRight = false;
+                }
+                else
+                {
+                    // Wall is on the left side
+                    rb.linearVelocity = new Vector2(force, jumpForce - force);
+                    facingRight = true;
+                }
+                transform.localScale = new Vector3(
+                    facingRight ? 1.6f : -1.6f,
+                    1.6f,
+                    1f
+                );
+            }
         }
 
         jumpRequest = false;
