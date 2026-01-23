@@ -4,52 +4,48 @@ using System.Collections;
 public class Platform : MonoBehaviour
 {
     [Header("Movement Settings")]
-    public float targetY = 10f;
+    public Vector2 targetPos;
     public float speed = 2f;
 
-    float startY;
-    Coroutine routine;
+    Vector2 startPos;
+    
+    private bool onPlate;
+
 
     void Start()
     {
-        startY = transform.position.y;
+        startPos = transform.position;
     }
 
     public void GoUp()
     {
-        StartMove(targetY);
+        onPlate = true;
     }
 
     public void GoDown()
     {
-        StartMove(startY);
+        onPlate = false;
     }
 
-    void StartMove(float y)
+    void Update()
     {
-        if (routine != null)
-            StopCoroutine(routine);
-
-        routine = StartCoroutine(MoveTo(y));
+        StartCoroutine(MoveTo(speed));
     }
 
-    IEnumerator MoveTo(float y)
+    IEnumerator MoveTo(float moveSpeed)
     {
-        while (!Mathf.Approximately(transform.position.y, y))
+        if(onPlate)
         {
-            float newY = Mathf.MoveTowards(
-                transform.position.y,
-                y,
-                speed * Time.deltaTime
-            );
-
-            transform.position = new Vector3(
-                transform.position.x,
-                newY,
-                transform.position.z
-            );
-
-            yield return null;
+            float step = moveSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+            yield return new WaitForSeconds(0.01f); 
+        }
+    
+        else
+        {
+            float step = moveSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, startPos, step);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 }
