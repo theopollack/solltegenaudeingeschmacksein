@@ -7,7 +7,7 @@ public class Movement : MonoBehaviour
     public LayerMask groundLayer;
     public bool isPlayerOne = true;
 
-    public Transform groundCheck;   // empty child at feet
+    public Transform groundCheck;  
     public float groundCheckRadius = 0.15f;
 
     private Rigidbody2D rb;
@@ -46,6 +46,11 @@ public class Movement : MonoBehaviour
         // -------- ANIMATION --------
         anim.SetBool("isWalking", moveInput != 0);
         bool isWalking = anim.GetBool("isWalking");
+        if(!isWalking)
+        {
+            anim.Play("New State");
+        }
+
 
         if (moveInput > 0) facingRight = true;
         else if (moveInput < 0) facingRight = false;
