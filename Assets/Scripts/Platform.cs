@@ -19,36 +19,33 @@ public class Platform : MonoBehaviour
 
     public void GoUp()
     {
-        StartCoroutine(MoveTo(speed));
         onPlate = true;
     }
 
     public void GoDown()
     {
-        StartCoroutine(MoveTo(speed));
         onPlate = false;
+    }
+
+    void Update()
+    {
+        StartCoroutine(MoveTo(speed));
     }
 
     IEnumerator MoveTo(float moveSpeed)
     {
         if(onPlate)
         {
-            while(Mathf.Abs((transform.position.x - targetPos.x)) > 0.1f || Mathf.Abs((transform.position.y - targetPos.y)) > 0.15f)
-            {
-                float step = moveSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-                yield return new WaitForSeconds(0.01f);
-            }   
+            float step = moveSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+            yield return new WaitForSeconds(0.01f); 
         }
+    
         else
         {
-            while(Mathf.Abs((transform.position.x - startPos.x)) > 0.1f || Mathf.Abs((transform.position.y - startPos.y)) > 0.2f)
-            {
-                float step = moveSpeed * Time.deltaTime;
-                transform.position = Vector3.MoveTowards(transform.position, startPos, step);
-                yield return new WaitForSeconds(0.01f);
-            }   
+            float step = moveSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, startPos, step);
+            yield return new WaitForSeconds(0.01f);
         }
-        
     }
 }
