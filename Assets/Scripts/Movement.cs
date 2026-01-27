@@ -52,9 +52,8 @@ public class Movement : MonoBehaviour
     void Update()
     {
         // -------- INPUT --------
-        moveInput = 0f;
-        if(!justWallJumped)
-        {
+        if (!justWallJumped) {
+            moveInput = 0f;
             if (isPlayerOne)
             {
                 if (Input.GetKey(KeyCode.LeftArrow)) moveInput = -1f;
@@ -66,9 +65,23 @@ public class Movement : MonoBehaviour
                 else if (Input.GetKey(KeyCode.D)) moveInput = 1f;
             }
         }
+        /*else {
+        if (isPlayerOne)
+            {
+                if (Input.GetKey(KeyCode.LeftArrow)) moveInput = -1f;
+                else if (Input.GetKey(KeyCode.RightArrow)) moveInput = 1f;
+            }
+            else
+            {
+                if (Input.GetKey(KeyCode.A)) moveInput = -0.5f;
+                else if (Input.GetKey(KeyCode.D)) moveInput = 0.5f;
+            }
+        }
+        */
 
         if (Input.GetKeyDown(KeyCode.Space))
             jumpRequest = true;
+        
 
         // -------- ANIMATION --------
         anim.SetBool("isWalking", moveInput != 0);
@@ -119,7 +132,7 @@ public class Movement : MonoBehaviour
         // -------- JUMP --------
         if (jumpRequest && isGrounded || onWall && !isPlayerOne && jumpRequest && !isGrounded)
         {
-            float force = 40f; // Horizontal force applied during wall jump
+            float force = 20f; // Horizontal force applied during wall jump
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
             if(onWall && !isPlayerOne && jumpRequest && !isGrounded)
@@ -127,14 +140,16 @@ public class Movement : MonoBehaviour
                 justWallJumped = true;
                 if (currentWallChecker.transform.position.x > transform.position.x)
                 {
-                    // Wall is on the right side
-                    rb.linearVelocity = new Vector2(-force, jumpForce - force);
+                    // Wall is on the right side - push left
+                    moveInput = -1f;
+                    rb.linearVelocity = new Vector2(-force, jumpForce);
                     facingRight = false;
                 }
                 else
                 {
-                    // Wall is on the left side
-                    rb.linearVelocity = new Vector2(force, jumpForce - force);
+                    // Wall is on the left side - push right
+                    moveInput = 1f;
+                    rb.linearVelocity = new Vector2(force, jumpForce);
                     facingRight = true;
                 }
                 transform.localScale = new Vector3(
