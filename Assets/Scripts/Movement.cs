@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public float speed = 12f;
+    public float Speed = 12f;
+    private float speed;
     public float jumpForce = 16f;
     public LayerMask groundLayer;
     public bool isPlayerOne = true;
@@ -47,6 +48,7 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        speed = Speed;
     }
 
     void Update()
@@ -121,6 +123,7 @@ public class Movement : MonoBehaviour
             float friction = 0.7f; // 0 = stop instantly, 1 = no friction (adjust to taste)
             float newVelocityX = Mathf.Lerp(rb.linearVelocity.x, targetVelocityX, friction);
             rb.linearVelocity = new Vector2(newVelocityX, rb.linearVelocity.y);
+            speed = Speed;
             justWallJumped = false;
         }
         else
@@ -132,7 +135,7 @@ public class Movement : MonoBehaviour
         // -------- JUMP --------
         if (jumpRequest && isGrounded || onWall && !isPlayerOne && jumpRequest && !isGrounded)
         {
-            float force = 20f; // Horizontal force applied during wall jump
+            float force = 0.000000001f; // Horizontal force applied during wall jump
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
             if(onWall && !isPlayerOne && jumpRequest && !isGrounded)
@@ -142,6 +145,7 @@ public class Movement : MonoBehaviour
                 {
                     // Wall is on the right side - push left
                     moveInput = -1f;
+                    speed *= 0.5f;
                     rb.linearVelocity = new Vector2(-force, jumpForce);
                     facingRight = false;
                 }
@@ -149,6 +153,7 @@ public class Movement : MonoBehaviour
                 {
                     // Wall is on the left side - push right
                     moveInput = 1f;
+                    speed *= 0.5f;
                     rb.linearVelocity = new Vector2(force, jumpForce);
                     facingRight = true;
                 }
