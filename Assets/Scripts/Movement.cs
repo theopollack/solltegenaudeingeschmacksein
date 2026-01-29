@@ -135,8 +135,9 @@ public class Movement : MonoBehaviour
         // -------- JUMP --------
         if (jumpRequest && isGrounded || onWall && !isPlayerOne && jumpRequest && !isGrounded)
         {
-            float force = 0.000000001f; // Horizontal force applied during wall jump
+            speed = Speed;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
 
             if(onWall && !isPlayerOne && jumpRequest && !isGrounded)
             {
@@ -144,17 +145,17 @@ public class Movement : MonoBehaviour
                 if (currentWallChecker.transform.position.x > transform.position.x)
                 {
                     // Wall is on the right side - push left
-                    moveInput = -1f;
+                    moveInput = -1.4f;
                     speed *= 0.5f;
-                    rb.linearVelocity = new Vector2(-force, jumpForce);
+                    rb.linearVelocity = new Vector2(0, jumpForce);
                     facingRight = false;
                 }
                 else
                 {
                     // Wall is on the left side - push right
-                    moveInput = 1f;
+                    moveInput = 1.4f;
                     speed *= 0.5f;
-                    rb.linearVelocity = new Vector2(force, jumpForce);
+                    rb.linearVelocity = new Vector2(0, jumpForce);
                     facingRight = true;
                 }
                 transform.localScale = new Vector3(
