@@ -11,6 +11,10 @@ public class Movement : MonoBehaviour
     public Transform groundCheck;  
     public float groundCheckRadius = 0.15f;
 
+    public bool canWallJump = false;
+
+    public float maxFallSpeed = -20f;
+
     private Rigidbody2D rb;
     private Animator anim;
     private bool facingRight = true;
@@ -133,13 +137,13 @@ public class Movement : MonoBehaviour
         }
 
         // -------- JUMP --------
-        if (jumpRequest && isGrounded || onWall && !isPlayerOne && jumpRequest && !isGrounded)
+        if (jumpRequest && isGrounded || onWall && !isPlayerOne && jumpRequest && !isGrounded && canWallJump)
         {
             speed = Speed;
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
 
-            if(onWall && !isPlayerOne && jumpRequest && !isGrounded)
+            if(onWall && !isPlayerOne && jumpRequest && !isGrounded && canWallJump)
             {
                 justWallJumped = true;
                 if (currentWallChecker.transform.position.x > transform.position.x)
@@ -166,7 +170,18 @@ public class Movement : MonoBehaviour
             }
         }
 
+        // -------- MAX FALL SPEED --------
+        Vector3 v = rb.linearVelocity;
+
+        if (v.y < maxFallSpeed)
+        {
+            v.y = maxFallSpeed;
+            rb.linearVelocity = v;
+        }
+        
+
         jumpRequest = false;
+
     }
 
 }
