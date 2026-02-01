@@ -8,7 +8,7 @@ public class Movement : MonoBehaviour
     public LayerMask groundLayer;
     public bool isPlayerOne = true;
 
-    public Transform groundCheck;  
+    public Transform groundCheck;
     public float groundCheckRadius = 0.15f;
 
     public bool canWallJump = false;
@@ -58,7 +58,8 @@ public class Movement : MonoBehaviour
     void Update()
     {
         // -------- INPUT --------
-        if (!justWallJumped) {
+        if (!justWallJumped)
+        {
             moveInput = 0f;
             if (isPlayerOne)
             {
@@ -87,12 +88,12 @@ public class Movement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
             jumpRequest = true;
-        
+
 
         // -------- ANIMATION --------
         anim.SetBool("isWalking", moveInput != 0);
         bool isWalking = anim.GetBool("isWalking");
-        if(!isWalking)
+        if (!isWalking)
         {
             anim.Play("New State");
         }
@@ -143,7 +144,7 @@ public class Movement : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
 
 
-            if(onWall && !isPlayerOne && jumpRequest && !isGrounded && canWallJump)
+            if (onWall && !isPlayerOne && jumpRequest && !isGrounded && canWallJump)
             {
                 justWallJumped = true;
                 if (currentWallChecker.transform.position.x > transform.position.x)
@@ -178,10 +179,17 @@ public class Movement : MonoBehaviour
             v.y = maxFallSpeed;
             rb.linearVelocity = v;
         }
-        
+
 
         jumpRequest = false;
 
+    }
+
+    public void SwitchGravity()
+    {
+        rb.gravityScale *= -1;
+        jumpForce *= -1;
+        gameObject.transform.Rotate(0f, 0f, 180f);
     }
 
 }
