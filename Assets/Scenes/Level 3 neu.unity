@@ -157,11 +157,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7499214256119740993, guid: cb007283ea7d6ec459d4004944c4501a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 77.94
+      value: 71.04
       objectReference: {fileID: 0}
     - target: {fileID: 7499214256119740993, guid: cb007283ea7d6ec459d4004944c4501a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -17.8
+      value: -17.83
       objectReference: {fileID: 0}
     - target: {fileID: 7499214256119740993, guid: cb007283ea7d6ec459d4004944c4501a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -294,7 +294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &216612251
 SpriteRenderer:
   serializedVersion: 2
@@ -614,7 +614,7 @@ GameObject:
   - component: {fileID: 365769643}
   - component: {fileID: 365769642}
   m_Layer: 0
-  m_Name: 360_F_208385214_9fdxiqpl87cv11H4KtABl5wjJt70NG5M_0
+  m_Name: ExitSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

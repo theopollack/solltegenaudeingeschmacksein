@@ -9,6 +9,8 @@ TagManager:
   - Laser
   - LaserButton
   - Platform
+  - Mirror
+  - LaserReader
   layers:
   - Default
   - TransparentFX

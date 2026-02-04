@@ -6,7 +6,7 @@ public class WallJumpPickup : MonoBehaviour
     {
         Movement player = other.GetComponent<Movement>();
 
-        if (player != player.isPlayerOne && player != null) {
+        if (player != null  && !player.isPlayerOne) {
             player.canWallJump = true;
             Destroy(gameObject);
         }
