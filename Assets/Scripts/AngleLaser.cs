@@ -11,6 +11,7 @@ public class AngleLaser : MonoBehaviour
     public float MaxRayDistance;
     public LayerMask LayerDetection;
     public float rotationSpeed;
+    public GameObject DeactivateObj;
 
     private void Start()
     {
@@ -51,7 +52,13 @@ public class AngleLaser : MonoBehaviour
                     if(hit.collider.CompareTag("LaserReader"))
                     {
                         Debug.Log("karl");
+                        DeactivateObj.SetActive(true);
                     }
+                    else
+                    {
+                        DeactivateObj.SetActive(false);
+                    }
+
                     // hit non-mirror object: stop
                     break;
                 }
